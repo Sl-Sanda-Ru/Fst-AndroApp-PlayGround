@@ -1,0 +1,50 @@
+name: Build and Sign APK
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build APK
+        run: ./gradlew assembleDebug
+
+          # - name: Generate test key
+          #   run: |
+          #     keytool -genkey -v -keystore test.keystore -alias testkey -keyalg RSA \
+          #       -keysize 2048 -validity 10000 -storepass android -keypass android \
+          #       -dname "CN=Android Test, OU=Test, O=Test, L=Test, ST=Test, C=US"
+
+          # - name: Sign APK
+          #   run: |
+          #     jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 \
+          #       -keystore test.keystore -storepass android -keypass android \
+          #       app/build/outputs/apk/debug/app-debug.apk testkey
+
+        # - name: Verify signature
+        #   run: jarsigner -verify -verbose app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed-app
+          path: app/build/outputs/apk/debug/app-debug.apk
