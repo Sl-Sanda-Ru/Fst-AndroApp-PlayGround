@@ -1,0 +1,1 @@
+[![Build and Sign APK](https://github.com/Sl-Sanda-Ru/Fst-AndroApp-PlayGround/actions/workflows/android.yml/badge.svg)](https://github.com/Sl-Sanda-Ru/Fst-AndroApp-PlayGround/actions/workflows/android.yml)
